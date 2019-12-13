@@ -36,8 +36,15 @@ module.exports = ({
       ...req.body,
     };
 
-    const a = parse(createSchema, req.body);
-    return res.status(Status.OK).json(Success(a));
+    // Pass body data to validate with predefined schema
+    const data = parse(createSchema, req.body);
+
+    if (data.valid) {
+      jayessdb.append('scheduleRules', data);
+      return res.status(Status.OK).json(Success(data));
+    } 
+    
+    return res.status(Status.FORBIDDEN).json(Fail(data));
   });
 
   router.delete('/rules/:id', async (req, res) => {

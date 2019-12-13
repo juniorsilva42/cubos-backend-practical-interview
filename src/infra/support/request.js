@@ -11,7 +11,12 @@ const parse = curryN(2, (schema, data) => {
       if (error) {
         const { name, details, annotate } = error;
 
-        return { name, details, annotate };
+        return { 
+          name, 
+          details, 
+          annotate, 
+          valid: false 
+        };
       }
     };
   
@@ -21,7 +26,7 @@ const parse = curryN(2, (schema, data) => {
       return prettyError(error);
     }
 
-    return value;
+    return { ...value, valid: true };
   } catch (err) {
     console.log(err);
   }

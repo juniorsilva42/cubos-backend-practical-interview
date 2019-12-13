@@ -10,7 +10,11 @@ const createSchema = {
     .required(),
 
   dateRule: Joi
-    .object({ at: Joi.string(), intervals: Joi.array().items({ start: Joi.string(), end: Joi.string() }) }),
+    .object({ 
+      at: Joi.string(),
+      days: Joi.array().items(Joi.string()), 
+      intervals: Joi.array().items({ start: Joi.string(), end: Joi.string() }), 
+    }),
 }
 
 module.exports = { createSchema };
