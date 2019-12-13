@@ -1,0 +1,5 @@
+--require @babel/register
+--require @babel/polyfill
+--require ./__tests__/bootstrap.js
+--slow 6000
+--reporter spec

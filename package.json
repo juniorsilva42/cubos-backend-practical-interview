@@ -7,7 +7,10 @@
     "start": "APP_ENV=development BABEL_ENV=development ./node_modules/.bin/babel-node ./src/index",
     "dev": "APP_ENV=development ./node_modules/.bin/nodemon ./node_modules/.bin/babel-node ./src/index",
     "lint": "./node_modules/.bin/eslint ./src/**/*.js",
-    "lint:fix": "./node_modules/.bin/eslint ./src/**/*.js --fix"
+    "lint:fix": "./node_modules/.bin/eslint ./src/**/*.js --fix",
+    "test:unit": "APP_ENV=test ./node_modules/.bin/mocha --opts ./__tests__/mocha.opts ./__tests__/unit -name '*.spec.js' --recursive -R spec",
+    "test:integration": "APP_ENV=test ./node_modules/.bin/mocha --opts ./__tests__/mocha.opts ./__tests__/integration -name '*.spec.js' --recursive -R spec",
+    "test": "npm run test:unit && npm run test:integration"
   },
   "repository": {
     "type": "git",
@@ -31,9 +34,12 @@
     "babel-minify": "0.5.1",
     "babel-preset-minify": "0.5.1",
     "babel-register": "6.26.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "eslint": "^6.7.2",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.19.1",
+    "mocha": "^6.2.2",
     "nodemon": "2.0.1"
   },
   "dependencies": {
@@ -46,10 +52,9 @@
     "helmet": "3.21.2",
     "http-status": "1.4.2",
     "joi": "^14.3.1",
-    "mocha": "^6.2.2",
     "morgan": "^1.9.1",
     "ramda": "0.26.1",
-    "redis": "^2.8.0",
+    "supertest": "^4.0.2",
     "winston": "^3.2.1"
   }
 }

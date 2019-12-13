@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import Status from 'http-status';
 
 /**
  * Router of attendance module
@@ -11,7 +12,7 @@ module.exports = ({
   const router = Router();
 
   router.get('/', async (req, res) => {
-    logger.info('attendance router works!');
+    return res.status(Status.OK).json('get attendance rules works!');
   });
 
   router.get('/:interval', async (req, res) => {

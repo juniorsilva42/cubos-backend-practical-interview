@@ -1,5 +1,5 @@
 ## Cubos Tecnologia - Backend Practical Interview 
-> A microservice to manage to manage clinic hours
+A microservice to manage clinic attendance hours
 --------------------
 
 Candidate: Ivanicio Junior   
