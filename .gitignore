@@ -3,7 +3,7 @@ build
 dist
 .serverless
 .webpack.test.import
-.vscode
+/.vscode
 
 ### Node ###
 # Logs
@@ -34,3 +34,4 @@ jspm_packages
 .node_repl_history
 
 /data
+/logs

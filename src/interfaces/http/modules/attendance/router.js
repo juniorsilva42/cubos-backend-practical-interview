@@ -8,6 +8,7 @@ import Status from 'http-status';
 */
 module.exports = ({
   logger,
+  jayessdb,
   response: { Success, Fail },
 }) => {
   const router = Router();
@@ -16,11 +17,11 @@ module.exports = ({
     return res.status(Status.OK).json(Success('get attendance rules works!'));
   });
 
-  router.get('/:interval', async (req, res) => {
+  router.get('/rules/:interval', async (req, res) => {
     logger.info('attendance router works!');
   });
 
-  router.post('/', async (req, res) => {
+  router.post('/rules', async (req, res) => {
     const modelToPost = {
       attendanceRules: [
         {
@@ -57,7 +58,7 @@ module.exports = ({
     logger.info('attendance router works!');
   });
 
-  router.delete('/:id', async (req, res) => {
+  router.delete('/rules/:id', async (req, res) => {
     logger.info('attendance router works!');
   });
 

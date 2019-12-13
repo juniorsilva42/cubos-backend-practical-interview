@@ -29,8 +29,16 @@ module.exports = () => {
       .write();
   };
 
+  const get = (from, params = {}) => {
+    db
+      .get(from)
+      .find(params)
+      .value();
+  };
+
   return {
     append,
     update,
+    get,
   };
 };
