@@ -43,7 +43,9 @@
     "express": "4.17.1",
     "helmet": "3.21.2",
     "http-status": "1.4.2",
+    "morgan": "^1.9.1",
     "ramda": "0.26.1",
-    "redis": "^2.8.0"
+    "redis": "^2.8.0",
+    "winston": "^3.2.1"
   }
 }
