@@ -51,7 +51,11 @@ module.exports = ({
   });
 
   router.delete('/rules/:id', async (req, res) => {
-    logger.info('attendance router works!');
+    const { id } = req.params;
+
+    const data = jayessdb.del('scheduleRules', { id }); 
+
+    return res.status(Status.OK).json(Success(data));
   });
 
   return router;

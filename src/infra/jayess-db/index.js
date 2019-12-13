@@ -30,15 +30,23 @@ module.exports = () => {
   };
 
   const get = (from, params = {}) => {
-    db
+    return db
       .get(from)
       .find(params)
       .value();
   };
 
+  const del = (from, params = {}) => {
+    db
+      .get(from)
+      .remove(params)
+      .write();
+  };
+
   return {
     append,
     update,
+    del,
     get,
   };
 };
