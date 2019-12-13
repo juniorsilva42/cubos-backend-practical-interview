@@ -8,7 +8,7 @@ import compression from 'compression';
 /* 
  * Internal Dependencies 
 */
-import router from './router';
+import router from '../interfaces/http/router';
 
 module.exports = () => {
   const app = express();
@@ -20,6 +20,7 @@ module.exports = () => {
   
   // Routes of configuration
   app.disable('x-powered-by');
+
   app.use(`/api/v1`, router());
 
   return app;

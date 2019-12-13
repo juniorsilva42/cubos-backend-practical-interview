@@ -9,11 +9,16 @@ import Status from 'http-status';
 /* 
  * Internal Dependencies 
 */
-import { Success } from '../infra/support/response';
+import { Success } from '../../infra/support/response';
+import httpLogger from './middlewares/httpLogger';
+import logger from '../../infra/logging';
 
 module.exports = () => {
   const router = Router();
 
+  // Set default logger to handle with all http requests
+  router.use(httpLogger(logger()));
+  
   router.options('*', cors());
   router.use(cors('*'));
   router.use(bodyParser.json());

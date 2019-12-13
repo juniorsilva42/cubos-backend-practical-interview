@@ -5,12 +5,12 @@ if (!fs.existsSync('logs')) {
   fs.mkdirSync('logs');
 }
 
-module.exports = ({ config }) =>
+module.exports = () =>
   new winston.createLogger({
     transports: [
       new winston.transports.Console(),
       new winston.transports.File(Object.assign(
-        config.logging, {
+        true, {
           filename: `logs/development.log.txt`,
         },
       )),

@@ -1,23 +1,26 @@
-import { curryN, compose, objOf } from 'ramda';
-import { normalizeErrors } from './errors/normalizer';
+import { assoc } from 'ramda';
 
-const buildErrorPayload = compose(
-  objOf('errors'),
-  normalizeErrors
+/**
+ * Helper to standardize responses
+ * 
+ * @param success
+ * 
+ * @return {data, version, date}
+*/
+const defaultResponse = (success = true) => ({
+  success,
+  version: 'v1',
+  date: new Date(),
+});
+
+export const Success = data => assoc(
+  'data',
+  data,
+  defaultResponse(true),
 );
 
-const buildSuccessResponse = curryN(2, (statusCode, data) => ({
-  statusCode,
-  body: data,
-}));
-
-const buildFailureResponse = curryN(2, (statusCode, data) => ({
-  statusCode,
-  body: buildErrorPayload(data),
-}));
-
-module.exports = {
-  buildErrorPayload,
-  buildSuccessResponse,
-  buildFailureResponse,
-};
+export const Fail = data => assoc(
+  'error',
+  data,
+  defaultResponse(false),
+);
