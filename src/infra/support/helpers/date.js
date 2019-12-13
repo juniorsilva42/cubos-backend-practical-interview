@@ -1,8 +1,8 @@
 export const validateTwoRangeInterval = ({ startDate, endDate }) => {
-  const startDate = new Date(startDate);
-  const startDate = new Date(endDate);
+  const firstDate = new Date(startDate);
+  const secondDate = new Date(endDate);
 
-  if (startDate.getTime() < endDate.getTime()) {
+  if (firstDate.getTime() < secondDate.getTime()) {
     return true;
   }
 
@@ -11,9 +11,11 @@ export const validateTwoRangeInterval = ({ startDate, endDate }) => {
 }
 
 export const formatter = (date) => {
-  const day = day.getDate();
-  const month = day.getMonth() + 1;
-  const year = day.getFullYear();
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
 
-  return `${monthDay}-${month}-${year}`;
+  const formattedMonth = month < 10 ? `0${month}` : month;
+
+  return `${day}-${formattedMonth}-${year}`;
 };

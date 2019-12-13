@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import Status from 'http-status';
+import { formatter } from '../../../../infra/support/helpers/date';
 
 /**
  * Router of attendance module
@@ -14,7 +15,9 @@ module.exports = ({
   const router = Router();
 
   router.get('/rules', async (req, res) => {
-    return res.status(Status.OK).json(Success('get attendance rules works!'));
+    const d = formatter(new Date());
+
+    return res.status(Status.OK).json(Success(`get attendance rules works! ${d}`));
   });
 
   router.get('/rules/:interval', async (req, res) => {
