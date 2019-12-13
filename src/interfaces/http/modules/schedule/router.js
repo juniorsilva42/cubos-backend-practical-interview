@@ -2,7 +2,7 @@ import { Router } from 'express';
 import Status from 'http-status';
 import shortUuid from 'short-uuid';
 
-import { formatter } from '../../../../infra/support/helpers/date';
+import { formatter, validateTwoRangeInterval } from '../../../../infra/support/helpers/date';
 import { createSchema } from './schema';
 import { parse } from '../../../../infra/support/request';
 import { reject } from '../../../../infra/support/helpers/util';
@@ -26,7 +26,26 @@ module.exports = ({
   });
 
   router.get('/rules/:interval', async (req, res) => {
-    logger.info('attendance router works!');
+    const { interval } = req.params;
+
+    if (interval) {
+      const dates = interval.split('::');
+
+      if (dates.length <= 1) {
+        return res.status(Status.FORBIDDEN).json(Fail('Badly formatted date range'));
+      }
+
+      const startDate = date[0];
+      const endDate = date[1];
+      
+      // Start date must be less than or equal to end date
+      if (validateTwoRangeInterval({ startDate, endDate })) {
+          
+      }
+
+    } else {
+      return res.status(Status.FORBIDDEN).json(Fail('Badly formatted date range'));
+    }
   });
 
   router.post('/rules', async (req, res) => {

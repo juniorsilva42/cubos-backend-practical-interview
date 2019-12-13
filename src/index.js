@@ -1,5 +1,4 @@
 import container from './container';
-import jayess from './infra/jayess-db';
 
 const app = container.resolve('app');
 
