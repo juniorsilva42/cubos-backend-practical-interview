@@ -5,7 +5,7 @@ import { isEmptyObject } from './util';
 
 module.exports = () => {
   const source = './data/cubos-db.json';
-  const documents = { attendance: [] };
+  const documents = { scheduleRules: [] };
 
   const adapter = new FileSync(source);
   const db = lowdb(adapter);
