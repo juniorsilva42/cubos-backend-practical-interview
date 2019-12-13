@@ -1,14 +1,14 @@
-import format from 'date-fns/format';
-
 export const validateTwoRangeInterval = ({ startDate, endDate }) => {
-  const firstDate = new Date(startDate);
-  const secondDate = new Date(endDate);
+  const startDateSplit = startDate.split('-');
+  const endDateSplit = endDate.split('-');
+
+  const firstDate = new Date(startDateSplit[2], startDateSplit[1] - 1, startDateSplit[0]);
+  const secondDate = new Date(endDateSplit[2], endDateSplit[1] - 1, endDateSplit[0]);
 
   if (firstDate.getTime() <= secondDate.getTime()) {
     return true;
   }
 
-  // Invalid date ranges  
   return false;
 }
 

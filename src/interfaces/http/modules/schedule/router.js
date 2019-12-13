@@ -2,7 +2,11 @@ import { Router } from 'express';
 import Status from 'http-status';
 import shortUuid from 'short-uuid';
 
-import { formatter, validateTwoRangeInterval } from '../../../../infra/support/helpers/date';
+import { 
+  formatter, 
+  validateTwoRangeInterval,
+  isValidDate,
+} from '../../../../infra/support/helpers/date';
 import { createSchema } from './schema';
 import { parse } from '../../../../infra/support/request';
 import { reject } from '../../../../infra/support/helpers/util';
@@ -35,14 +39,14 @@ module.exports = ({
         return res.status(Status.FORBIDDEN).json(Fail('Badly formatted date range'));
       }
 
-      const startDate = date[0];
-      const endDate = date[1];
+      const startDate = dates[0];
+      const endDate = dates[1];
       
-      // Start date must be less than or equal to end date
-      if (validateTwoRangeInterval({ startDate, endDate })) {
-          
+      // Verify if start end final dates are valid
+      // And ensure which date must be less than or equal to end date
+      if (isValidDate(startDate) && isValidDate(endDate) && validateTwoRangeInterval({ startDate, endDate })) {
+        // seek data with date range interval
       }
-
     } else {
       return res.status(Status.FORBIDDEN).json(Fail('Badly formatted date range'));
     }
