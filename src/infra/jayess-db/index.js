@@ -1,16 +1,36 @@
-import jayessdb from './jayessdb';
-import fsync from './jayessdb/adapters';
+import lowdb from 'lowdb';
+import FileSync from 'lowdb/adapters/FileSync';
 
-const adapter = fsync('db.json');
-const db = jayessdb.bootstrap(adapter);
+import { isEmptyObject } from './util';
 
-if (db.isEmpty()) {
-  db
-    .setDocuments({ attendanceRules: [] })
-    .write()
+module.exports = () => {
+  const source = './data/cubos-db.json';
+  const documents = { attendance: [] };
 
-  db
-    .get('attendanceRules')
-    .push({ id: 1, title: 'awesome' })
-    .write()   
-}
+  const adapter = new FileSync(source);
+  const db = lowdb(adapter);
+
+  // Start db documents
+  if (isEmptyObject(db)) {
+    db.defaults(documents).write();
+  }
+
+  const append = (from, data) => {
+    db
+      .get(from)
+      .push(data)
+      .write();
+  };
+
+  const update = (from, data) => {
+    db
+      .update(from)
+      .push(data)
+      .write();
+  };
+
+  return {
+    append,
+    update,
+  };
+};
