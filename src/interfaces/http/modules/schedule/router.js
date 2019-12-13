@@ -4,6 +4,7 @@ import shortUuid from 'short-uuid';
 
 import { formatter } from '../../../../infra/support/helpers/date';
 import { createSchema } from './schema';
+import { parse } from '../../../../infra/support/request';
 
 /**
  * Router of attendance module
@@ -35,7 +36,8 @@ module.exports = ({
       ...req.body,
     };
 
-    return res.status(Status.OK).json(Success(commitChanges));
+    const a = parse(createSchema, req.body);
+    return res.status(Status.OK).json(Success(a));
   });
 
   router.delete('/rules/:id', async (req, res) => {
