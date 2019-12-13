@@ -9,10 +9,12 @@ import router from './router';
 module.exports = () => {
   const {
     logger,
+    response: { Success, Fail },
   } = container.cradle;
 
   return {
     router: router({
+      response: { Success, Fail },
       logger,
     }),
   };

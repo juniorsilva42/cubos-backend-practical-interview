@@ -10,6 +10,7 @@ import app from './bootstrap';
 import logging from './infra/logging';
 import router from './interfaces/http/router';
 import server from './server/app';
+import response from './infra/support/response';
 
 // Create a new instance of DI container
 const container = createContainer();
@@ -22,6 +23,7 @@ container.register({
   logger: asFunction(logging).singleton(),
   router: asFunction(router).singleton(),
   server: asFunction(server).singleton(),
+  response: asFunction(response).singleton(),
 });
 
 module.exports = container;

@@ -8,11 +8,12 @@ import Status from 'http-status';
 */
 module.exports = ({
   logger,
+  response: { Success, Fail },
 }) => {
   const router = Router();
 
-  router.get('/', async (req, res) => {
-    return res.status(Status.OK).json('get attendance rules works!');
+  router.get('/rules', async (req, res) => {
+    return res.status(Status.OK).json(Success('get attendance rules works!'));
   });
 
   router.get('/:interval', async (req, res) => {

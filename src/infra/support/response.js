@@ -1,26 +1,33 @@
 import { assoc } from 'ramda';
 
 /**
- * Helper to standardize responses
+ * Helper function to standardize responses
  *
  * @param success default = true
  *
  * @return {data, version, date}
 */
-const defaultResponse = (success = true) => ({
-  success,
-  version: 'v1',
-  date: new Date(),
-});
+module.exports = () => {
+  const defaultResponse = (success = true) => ({
+    success,
+    version: 'v1',
+    date: new Date(),
+  });
 
-export const Success = (data) => assoc(
-  'data',
-  data,
-  defaultResponse(true),
-);
+  const Success = data => assoc(
+    'data',
+    data,
+    defaultResponse(true),
+  );
 
-export const Fail = (data) => assoc(
-  'error',
-  data,
-  defaultResponse(false),
-);
+  const Fail = data => assoc(
+    'error',
+    data,
+    defaultResponse(false),
+  );
+
+  return {
+    Success,
+    Fail,
+  };
+};

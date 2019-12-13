@@ -29,7 +29,7 @@ module.exports = () => {
   router.use('/api/v1', router);
 
   // Default route to check api health
-  router.get('_health_check', (req, res) => res.status(Status.OK).json('API is running with a lot health!'));
+  router.get('/_health_check', (req, res) => res.status(Status.OK).json('API is running with a lot health!'));
 
   const routes = [
     { path: 'attendance', module: 'attendance' },
