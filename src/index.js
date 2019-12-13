@@ -1,4 +1,5 @@
 import container from './container';
+import jayess from './infra/jayess-db';
 
 const app = container.resolve('app');
 
@@ -7,6 +8,7 @@ const app = container.resolve('app');
     // Application start
     await app.start();
   } catch (err) {
+    console.log(err);
     throw new Error('Fatal Error Starting Application');
   }
 })();

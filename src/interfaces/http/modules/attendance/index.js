@@ -10,12 +10,14 @@ module.exports = () => {
   const {
     logger,
     response: { Success, Fail },
+    jayessdb,
   } = container.cradle;
 
   return {
     router: router({
       response: { Success, Fail },
       logger,
+      jayessdb,
     }),
   };
 };

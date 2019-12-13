@@ -11,8 +11,9 @@ import logging from './infra/logging';
 import router from './interfaces/http/router';
 import server from './server/app';
 import response from './infra/support/response';
+import jayessdb from './infra/jayess-db';
 
-// Create a new instance of DI container
+// Create a new instance of DI IoC container
 const container = createContainer();
 
 /**
@@ -24,6 +25,7 @@ container.register({
   router: asFunction(router).singleton(),
   server: asFunction(server).singleton(),
   response: asFunction(response).singleton(),
+  jayessdb: asFunction(jayessdb).singleton(),
 });
 
 module.exports = container;
