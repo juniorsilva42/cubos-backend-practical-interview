@@ -38,6 +38,7 @@ Here's a brief overview of technology stack:
  -  **[Ramda](https://www.npmjs.com/package/ramda)** -  A practical functional library for JavaScript programmers
  -  **[Winston](https://www.npmjs.com/package/winston)** -  A multi-transport async logging library
  -  **[Morgan](https://www.npmjs.com/package/morgan)** -  HTTP request logger middleware for node.js
+ -  **[lowdb](https://www.npmjs.com/package/lowdb)** - A lightweight functional utility to interact with json files based on fs module 
 
 A brief overview of the project file structure
 ```
