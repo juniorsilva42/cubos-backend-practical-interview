@@ -32,7 +32,7 @@ module.exports = () => {
   router.get('/_health_check', (req, res) => res.status(Status.OK).json('API is running with a lot health!'));
 
   const routes = [
-    { path: 'attendance', module: 'attendance' },
+    { path: 'schedule', module: 'schedule' },
   ];
 
   /*
