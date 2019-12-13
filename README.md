@@ -64,6 +64,9 @@ A brief overview of the project file structure
 4. Access `http://localhost:<PORT>/api/<VERSION>`
     > Default setting usually: http://localhost:5000/api/v1
 
+You can too
+1. Run the application in development mode Docker from `docker-compose up`
+
 ## CLI Brief
 - `yarn dev` - start the API locally/development
 - `yarn test` - run tests
@@ -90,4 +93,5 @@ A brief overview of the project file structure
 
 
 ## Data flow
+
 

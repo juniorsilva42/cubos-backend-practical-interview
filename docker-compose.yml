@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  app:
+    container_name: cubos-backend-practical-interview-api
+    build: .
+    restart: always
+    volumes:
+      - ./:/home/app/cubos-backend-practical-interview-api
+      - /home/app/cubos-backend-practical-interview-api/node_modules
+    command: node_modules/.bin/nodemon -L --exec npm run dev
+    environment:
+      APP_ENV: development
+      DOCKER_HOST: host.docker.internal
+    ports:
+      - 5000:5000
