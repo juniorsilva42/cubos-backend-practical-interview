@@ -3,6 +3,7 @@ build
 dist
 .serverless
 .webpack.test.import
+.vscode
 
 ### Node ###
 # Logs
