@@ -31,13 +31,13 @@ module.exports = ({
   router.post('/rules', async (req, res) => {
     const id = shortUuid.generate();
 
-    const commitChanges = {
+    const createBody = {
       id,
       ...req.body,
     };
 
     // Pass body data to validate with predefined schema
-    const data = parse(createSchema, req.body);
+    const data = parse(createSchema, createBody);
 
     if (data.valid) {
       jayessdb.append('scheduleRules', data);

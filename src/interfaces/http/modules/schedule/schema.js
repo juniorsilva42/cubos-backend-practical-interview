@@ -1,6 +1,10 @@
 import Joi from 'joi';
 
 const createSchema = {
+  id: Joi
+  .string()
+  .required(),
+
   attendanceType: Joi
     .string()
     .required(),
