@@ -1,0 +1,48 @@
+{
+  "name": "cubos-backend-practical-interview-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "APP_ENV=development BABEL_ENV=development ./node_modules/.bin/babel-node ./src/index",
+    "dev": "APP_ENV=development ./node_modules/.bin/nodemon ./node_modules/.bin/babel-node ./src/index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsiilva1/cubos-backend-practical-interview"
+  },
+  "author": "Junior Silva <jsiilva@outlook.com.br>",
+  "bugs": {
+    "url": "https://github.com/jsiilva1/cubos-backend-practical-interview/issues"
+  },
+  "homepage": "https://github.com/jsiilva1/cubos-backend-practical-interview#readme",
+  "devDependencies": {
+    "@babel/cli": "7.7.5",
+    "@babel/core": "7.7.5",
+    "@babel/node": "7.7.4",
+    "@babel/polyfill": "7.7.0",
+    "@babel/preset-env": "7.7.5",
+    "@babel/register": "7.7.4",
+    "@babel/runtime": "7.7.5",
+    "babel-eslint": "10.0.3",
+    "babel-loader": "8.0.6",
+    "babel-minify": "0.5.1",
+    "babel-preset-minify": "0.5.1",
+    "babel-register": "6.26.0",
+    "eslint": "^6.7.2",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "nodemon": "2.0.1"
+  },
+  "dependencies": {
+    "awilix": "4.2.3",
+    "body-parser": "1.19.0",
+    "compression": "1.7.4",
+    "cors": "2.8.5",
+    "dotenv": "8.2.0",
+    "express": "4.17.1",
+    "helmet": "3.21.2",
+    "http-status": "1.4.2",
+    "ramda": "0.26.1"
+  }
+}
