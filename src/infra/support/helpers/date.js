@@ -1,4 +1,4 @@
-export const validateTwoRangeIntervalDates = ({ startDate, endDate }) => {
+export const validateTwoRangeInterval = ({ startDate, endDate }) => {
   const startDate = new Date(startDate);
   const startDate = new Date(endDate);
 
@@ -9,3 +9,11 @@ export const validateTwoRangeIntervalDates = ({ startDate, endDate }) => {
   // Invalid date ranges  
   return false;
 }
+
+export const formatter = (date) => {
+  const day = day.getDate();
+  const month = day.getMonth() + 1;
+  const year = day.getFullYear();
+
+  return `${monthDay}-${month}-${year}`;
+};
