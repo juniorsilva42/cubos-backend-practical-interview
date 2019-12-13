@@ -2,9 +2,9 @@ import { assoc } from 'ramda';
 
 /**
  * Helper to standardize responses
- * 
- * @param success
- * 
+ *
+ * @param success default = true
+ *
  * @return {data, version, date}
 */
 const defaultResponse = (success = true) => ({
@@ -13,13 +13,13 @@ const defaultResponse = (success = true) => ({
   date: new Date(),
 });
 
-export const Success = data => assoc(
+export const Success = (data) => assoc(
   'data',
   data,
   defaultResponse(true),
 );
 
-export const Fail = data => assoc(
+export const Fail = (data) => assoc(
   'error',
   data,
   defaultResponse(false),

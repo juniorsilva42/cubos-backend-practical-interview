@@ -1,7 +1,7 @@
 import path from 'path';
 
 /**
- * Create controller path to resource
+ * Function create controller path to resource
  *
  * @return {BootModule} instance.
  */
