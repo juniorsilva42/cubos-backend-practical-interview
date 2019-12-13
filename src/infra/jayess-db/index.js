@@ -29,10 +29,16 @@ module.exports = () => {
       .write();
   };
 
-  const get = (from, params = {}) => {
+  const getByFind = (from, params = {}) => {
     return db
       .get(from)
       .find(params)
+      .value();
+  };
+
+  const getAll = (from) => {
+    return db
+      .get(from)
       .value();
   };
 
@@ -47,6 +53,7 @@ module.exports = () => {
     append,
     update,
     del,
-    get,
+    getByFind,
+    getAll,
   };
 };

@@ -12,6 +12,12 @@ export const validateTwoRangeInterval = ({ startDate, endDate }) => {
   return false;
 }
 
+export const validateDate = (date) => {
+  const dateSplit = date.split('-');
+
+  return new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]);
+}
+
 export const formatter = (date) => {
   const day = date.getDate();
   const month = date.getMonth() + 1;
@@ -31,3 +37,19 @@ export const isValidDate = (date) => {
   
   return false;
 };
+
+export const isValidHour = (hour) => {
+  const regex = /^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d))$/; 
+
+  if (regex.exec(hour)) {
+    return true;
+  }
+  
+  return false;
+};
+
+export const formatAndSetHour = (hour, date) => {
+  const splitHour = hour.split(':');
+
+  return date.setHours(splitHour[0], splitHour[1]);
+}
