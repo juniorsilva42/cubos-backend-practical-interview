@@ -5,6 +5,7 @@ import shortUuid from 'short-uuid';
 import { formatter } from '../../../../infra/support/helpers/date';
 import { createSchema } from './schema';
 import { parse } from '../../../../infra/support/request';
+import { reject } from '../../../../infra/support/helpers/util';
 
 /**
  * Router of attendance module
@@ -40,7 +41,9 @@ module.exports = ({
     const data = parse(createSchema, createBody);
 
     if (data.valid) {
-      jayessdb.append('scheduleRules', data);
+      // Append schedule rule data rejecting valid property of Joi
+      jayessdb.append('scheduleRules', reject(data, ['valid']));
+
       return res.status(Status.OK).json(Success(data));
     } 
     
