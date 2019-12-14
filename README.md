@@ -171,7 +171,7 @@ Content-Type: application/json
    "success": true,
    "version": "v1",
    "date": now() date,
-   "data": rules array
+   "data": array
 }   
   ```
   > `200 Ok`
@@ -186,15 +186,15 @@ Content-Type: application/json
 {
    "success": true,
    "version": "v1",
-   "date": now() date,
-   "data": rules array
+   "date": now(),
+   "data": array
 }   
   ```
   > `200 Ok`
 
 #### 3. DELETE /schedule/rules/:ruleId
 
-Delete a schedule rule by `uuid short id`, for example a id <sub>uXdF8bSBPaBN9GeLdqm2WM<sub>
+Delete a schedule rule by `uuid short id` (id example uXdF8bSBPaBN9GeLdqm2WM)
 
   ```json
 DELETE /schedule/rules/:ruleId HTTP/1.1
@@ -202,7 +202,7 @@ Content-Type: application/json
 {
    "success": true,
    "version": "v1",
-   "date": now() date,
+   "date": now(),
 }   
   ```
   > `200 Ok`
