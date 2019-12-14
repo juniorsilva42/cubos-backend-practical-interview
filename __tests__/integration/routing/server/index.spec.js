@@ -4,7 +4,7 @@ describe('Server status', () => {
       .get('/_health_check')
       .end((err, res) => {
         expect(res).to.have.status(200);
-
+        
         done();
       });
   });

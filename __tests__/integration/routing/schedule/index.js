@@ -1,45 +1,82 @@
 import shortUuid from 'short-uuid';
-import jayessdb from '../../../../src/infra/jayess-db';
+import container from '../../../../src/container';
 
-describe('Route: /schedule/rules to handle with rules', () => {
-  beforeEach(() => {
-    jayessdb.init({ db: 'cubos-db-test.json', documents: { scheduleRules: [] } });
-  });
+const jayessdb = container.resolve('jayessdb');
 
-  describe('GET /schedule/rules', () => {
-    it('should return a message if not exists rules', done => {
+describe('Route: /schedule/rules to handle with rules', () => {  
+  describe('POST /schedule/rules', () => {   
+    it('should create a new schedule rule with daily restrition', done => {
+      let id = shortUuid.generate();
+
+      const mockScheduleRuleDailyRestrition = {
+        id,
+        attendanceType: "Pathology",
+        doctor: "Test House, M.D",
+        dateRule: {
+          type: "daily",
+          intervals: [
+            { start: "15:00", end: "16:00" }
+          ]
+        }      
+      };
+      
       request 
-        .get('/schedule/rules')
+        .post('/schedule/rules')
+        .type('json')
+        .send(mockScheduleRuleDailyRestrition)
         .end((err, res) => {
-          expect(res).to.have.status(404);
-          expect(res.body.success).to.equal(false);
-          expect(res.body.error).to.equal('There aren\'t registered rules');
+          expect(res).to.have.status(201);
 
           done();
         });
     });
-  });
 
-  describe('POST /schedule/rules', () => {
-    const id = shortUuid.generate();
+    it('should create a new schedule rule with weekly restrition', done => {
+      let id = shortUuid.generate();
 
-    const mockScheduleRule = {
-      id,
-      attendanceType: "Pathology",
-      doctor: "Test House, M.D",
-      dateRule: {
-        type: "daily",
-        intervals: [
-          { start: "15:00", end: "16:00" }
-        ]
-      }      
-    };
-    
-    it('should create a new schedule rule', done => {
+      const mockScheduleRuleWeeklyRestrition = {
+        id,
+        attendanceType: "Pathology",
+        doctor: "Test House, M.D",
+        dateRule: {
+          type: "weekly",
+          days: ['monday', 'friday'],
+          intervals: [
+            { start: "13:00", end: "15:00" }
+          ]
+        }      
+      };
+
       request 
         .post('/schedule/rules')
         .type('json')
-        .send(mockScheduleRule)
+        .send(mockScheduleRuleWeeklyRestrition)
+        .end((err, res) => {
+          expect(res).to.have.status(201);
+
+          done();
+        });
+    });
+
+    it('should create a new schedule rule with fixed date restrition', done => {
+      let id = shortUuid.generate();
+
+      const mockScheduleRuleFixedDate = {
+        id,
+        attendanceType: "Oncology",
+        doctor: "Test Alisson, M.D",
+        dateRule: {
+          at: "25-10-2019",
+          intervals: [
+            { start: "17:00", end: "18:00" }
+          ]
+        }      
+      };
+
+      request 
+        .post('/schedule/rules')
+        .type('json')
+        .send(mockScheduleRuleFixedDate)
         .end((err, res) => {
           expect(res).to.have.status(201);
 
