@@ -6,7 +6,7 @@ import {
 
 /**
  * Util found n elements on array
- * Worst and avg case: O(N)
+ * Worst and avg case: O(n) / O(n / 2)
  * Best case: O(1) very rare
  * 
  * @param {array} arr data array of schedule

@@ -1,3 +1,4 @@
+
 ## Cubos Tecnologia - Backend Practical Interview  :zap::white_medium_square:
 > A microservice to manage clinic attendance hours
 --------------------
@@ -95,4 +96,113 @@ You can too
 
 ## Data flow
 
+#### 1. POST /schedule/rules
 
+Create a new rule with restrition of type weekly and days ['monday', 'wednesday'] rule
+
+  ```json
+POST /schedule/rules HTTP/1.1
+Content-Type: application/json
+{
+   "attendanceType": "Pathology",
+   "doctor": "House, M.D",
+   "dateRule": {
+     "type": "weekly",
+     "days": ["monday","wednesday"],		
+	 "intervals": [
+	   { "start": "15:00",  "end": "16:00"}
+	 ]
+   }
+}   
+  ```
+    > 201 Created
+    > 403 Forbidden
+
+#### 1.1 POST /schedule/rules
+
+Create a new rule with a restrition to fixed date
+
+  ```json
+POST /schedule/rules HTTP/1.1
+Content-Type: application/json
+{
+   "attendanceType": "Pathology",
+   "doctor": "House, M.D",
+   "dateRule": {
+     "at": "31-08-2018",	
+	 "intervals": [
+	   { "start": "15:00",  "end": "16:00"}
+	 ]
+   }
+}   
+  ```
+    > 201 Created
+    > 403 Forbidden  
+
+#### 1.2 POST /schedule/rules
+
+Create a new rule with the restriction of existing daily within a time range
+
+  ```json
+POST /schedule/rules HTTP/1.1
+Content-Type: application/json
+{
+   "attendanceType": "Pathology",
+   "doctor": "House, M.D",
+   "dateRule": {
+     "type": "daily",	
+	 "intervals": [
+	   { "start": "15:00",  "end": "16:00"}
+	 ]
+   }
+}   
+  ```
+  > `201 Created`
+  > `403 Forbidden - server cannot process the body`
+
+#### 2. GET /schedule/rules
+
+Get all schedule rules
+
+  ```json
+GET /schedule/rules HTTP/1.1
+Content-Type: application/json
+{
+   "success": true,
+   "version": "v1",
+   "date": now() date,
+   "data": rules array
+}   
+  ```
+  > `200 Ok`
+
+#### 2.1 GET /schedule/rules/startDate::endDate
+
+Get schedule rule by date range interval
+
+  ```json
+GET /schedule/rules/startDate::endDate HTTP/1.1
+Content-Type: application/json
+{
+   "success": true,
+   "version": "v1",
+   "date": now() date,
+   "data": rules array
+}   
+  ```
+  > `200 Ok`
+
+#### 3. DELETE /schedule/rules/:ruleId
+
+Delete a schedule rule by `uuid short id`, for example a id <sub>uXdF8bSBPaBN9GeLdqm2WM<sub>
+
+  ```json
+DELETE /schedule/rules/:ruleId HTTP/1.1
+Content-Type: application/json
+{
+   "success": true,
+   "version": "v1",
+   "date": now() date,
+}   
+  ```
+  > `200 Ok`
