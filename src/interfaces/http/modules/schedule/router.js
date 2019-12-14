@@ -40,10 +40,11 @@ module.exports = ({
    * @return {boolean} true if not exists chock of intervals 
   */ 
   const _scheduleIsAllowed = (schedules, dateRuleToCreate) => {
+    const schedulers = schedules;
     const validDate = validateDate(dateRuleToCreate.at);
 
-    if (schedules.length > 0) {
-      for (let schedule of schedules) {
+    if (schedulers.length > 0) {
+      for (let schedule of schedulers) {
         const { dateRule } = schedule;
 
         if (isValidDate(dateRule.at) && dateRule.at === dateRuleToCreate.at) {
@@ -74,6 +75,9 @@ module.exports = ({
               }
             }
           }
+        } else {
+          // not same date
+          return true;
         }
       }
     }
@@ -158,15 +162,22 @@ module.exports = ({
       // Get all data to validate
       const allSchedule = jayessdb.getAll('scheduleRules');
 
-      if (_scheduleIsAllowed(allSchedule, dateRule)) {
-        // Append schedule rule data rejecting valid property of Joi
-        jayessdb.append('scheduleRules', reject(data, ['valid']));
-
-        return res.status(Status.OK).json(Success(data));
-      } else {
-        return res.status(Status.FORBIDDEN)
-          .json(Fail(`There is a rule in this same range for ${dateRule.at} date`));
+      if (allSchedule.length > 0) {
+        if (_scheduleIsAllowed(allSchedule, dateRule)) {
+          // Append schedule rule data rejecting valid property of Joi
+          jayessdb.append('scheduleRules', reject(data, ['valid']));
+  
+          return res.status(Status.OK).json(Success(data));
+        } else {
+          return res.status(Status.FORBIDDEN)
+            .json(Fail(`There is a rule in this same range for ${dateRule.at} date`));
+        }
       }
+
+      // Append schedule rule data rejecting valid property of Joi
+      jayessdb.append('scheduleRules', reject(data, ['valid']));
+
+      return res.status(Status.OK).json(Success(data));
     } 
     
     // return res.status(Status.FORBIDDEN).json(Fail(data));

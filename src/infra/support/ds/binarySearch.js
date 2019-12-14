@@ -32,7 +32,7 @@ export const findElementsBasedOnBinarySearch = (arr, { from, to }) => {
 
       if (currentDate >= fromDateToTime && currentDate <= toDateToTime) {
         l = h;
-        h = 2 * h;
+        h = h + 1;
         
         seekedData.push(arr[findBestIndex]);
       }
@@ -62,7 +62,13 @@ export const findElementsBasedOnBinarySearch = (arr, { from, to }) => {
 */ 
 const binarySearch = (data, { from, to }, start, end) => {
   let findBestIndex = 0;
-  const middle = Math.floor((start + end) / 2);
+  let middle = 0;
+
+  if (data.length <= 2) {
+    middle = 1;
+  } else {
+    middle = Math.floor((start + end) / 2) - 1;
+  }
 
   do {
     if (isValidDate(data[findBestIndex].dateRule.at)) {
@@ -85,5 +91,5 @@ const binarySearch = (data, { from, to }, start, end) => {
     }
 
     findBestIndex++;
-  } while (isValidDate(data[findBestIndex].dateRule.at));
+  } while (data[findBestIndex] && isValidDate(data[findBestIndex].dateRule.at));
 };
