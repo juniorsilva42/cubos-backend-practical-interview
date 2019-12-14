@@ -1,0 +1,210 @@
+{
+	"info": {
+		"_postman_id": "aba2e668-ea47-41ad-af3a-3a6a37a5359b",
+		"name": "Schedule Rules",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create a new rule",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"attendanceType\": \"Oncology\",\n\t\"doctor\": \"Test Alisson, M.D\",\n\t\"dateRule\": {\n\t\t\"at\": \"01-10-2019\",\n\t  \"intervals\": [\n\t\t\t{ \n\t\t\t\t\"start\": \"17:00\", \n\t\t\t\t\"end\": \"18:00\" \n\t\t\t}\n\t\t]\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/schedule/rules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"schedule",
+						"rules"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
+					]
+				},
+				"description": "Create a new rule by fixed date restrition"
+			},
+			"response": []
+		},
+		{
+			"name": "Create a new rule - 2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"attendanceType\": \"Oncology\",\n\t\"doctor\": \"Test Alisson, M.D\",\n\t\"dateRule\": {\n\t  \"type\": \"daily\",\n\t  \"intervals\": [\n\t\t\t{ \n\t\t\t\t\"start\": \"17:00\", \n\t\t\t\t\"end\": \"18:00\" \n\t\t\t}\n\t\t]\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/schedule/rules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"schedule",
+						"rules"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
+					]
+				},
+				"description": "Create a new rule by daily restrition"
+			},
+			"response": []
+		},
+		{
+			"name": "Create a new rule - 3",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"attendanceType\": \"Oncology\",\n\t\"doctor\": \"Test Alisson, M.D\",\n\t\"dateRule\": {\n\t  \"type\": \"weekly\",\n\t  \"days\": [\"friday\", \"saturday\"],\n\t  \"intervals\": [\n\t\t\t{ \n\t\t\t\t\"start\": \"15:00\", \n\t\t\t\t\"end\": \"18:00\" \n\t\t\t}\n\t\t]\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/schedule/rules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"schedule",
+						"rules"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
+					]
+				},
+				"description": "Create a new rule by weekly restrition with segmented days"
+			},
+			"response": []
+		},
+		{
+			"name": "Get all rules",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/api/v1/schedule/rules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"schedule",
+						"rules"
+					]
+				},
+				"description": "Get all rules"
+			},
+			"response": []
+		},
+		{
+			"name": "Get rules by range date",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/v1/schedule/rules/25-10-2019::01-11-2019",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"schedule",
+						"rules",
+						"25-10-2019::01-11-2019"
+					]
+				},
+				"description": "Get rules by range date interval\n\n- startDate::endDate parameters\n- separated by colon twice\n- Start date to seek\n- End date to seek"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete rule",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/api/v1/schedule/rules/64jF6DjnGqD7ArTBbhZ2CG",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"schedule",
+						"rules",
+						"64jF6DjnGqD7ArTBbhZ2CG"
+					]
+				},
+				"description": "Delete a schedule rule by ID (short uuid)\n\n- :ruleId parameter"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
