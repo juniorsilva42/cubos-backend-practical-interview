@@ -2,8 +2,8 @@ import Joi from 'joi';
 
 const createSchema = {
   id: Joi
-  .string()
-  .required(),
+    .string()
+    .required(),
 
   attendanceType: Joi
     .string()
@@ -14,11 +14,13 @@ const createSchema = {
     .required(),
 
   dateRule: Joi
-    .object({ 
+    .object({
       at: Joi.string(),
-      days: Joi.array().items(Joi.string()), 
-      intervals: Joi.array().items({ start: Joi.string(), end: Joi.string() }), 
+      atTime: Joi.number(),
+      type: Joi.string(),
+      days: Joi.array().items(Joi.string()),
+      intervals: Joi.array().items({ start: Joi.string(), end: Joi.string() }),
     }),
-}
+};
 
 module.exports = { createSchema };
