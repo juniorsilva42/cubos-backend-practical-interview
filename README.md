@@ -20,15 +20,20 @@ Phone: +55 89 994112266
 - [Data flow](#data-flow)
 
 ## Overview
+#### Tech:
 - uses Node.js > v10;
 - written using ES6;
 - uses Yarn for package dependency management;
 - uses [Airbnb Standard Style](https://github.com/airbnb/javascript)
 - You can use NPM scripts or orchestration with Docker;
+#### Useful Information:
+- You can access API docs at `http://localhost:<PORT>/api/<VERSION>/api-docs`. Usually: `http://localhost:5000/api/v1/api-docs	`
+- The data file will be created in a `data` folder in the project root, called ` cubos-db.json` 
+- The swagger documentation file and postman collections are located in the `docs` folder at the root of the project.
 
 ## Technology
 Here's a brief overview of technology stack:
--  **[Express](https://github.com/expressjs/express)** as a tool to build the web server that handles our boleto endpoints.
+-  **[Express](https://github.com/expressjs/express)** as a tool to build the web server that handles with endpoints.
 -  **[Docker](https://docs.docker.com)** and **[Docker Compose](https://docs.docker.com/compose/)** as useful option to create development environment.
 -  **[Mocha](https://www.npmjs.com/package/mocha)** as a test runner and **[Chai](http://chaijs.com)** to do some more advanced test assertions.
 -  **[Nodemon](https://nodemon.io/)** as a tool to use for development file reload.
@@ -206,3 +211,7 @@ Content-Type: application/json
 }   
   ```
   > `200 Ok`
+
+---
+
+Made by Ivanicio Jr 
