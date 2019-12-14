@@ -1,0 +1,141 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "",
+    "version": "1.0.0",
+    "title": "Cubos Practical Backend Interview",
+    "contact": {
+      "name": "Junior Silva",
+      "email": "jsiilva@outlook.com.br"
+    }
+  },
+  "host": "http://localhost:5000",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "schedule",
+      "description": "Operations about schedule rules"
+    }
+  ],
+  "paths": {
+    "/rules": {
+      "post": {
+        "tags": ["schedule"],
+        "summary": "Create a new rule",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Body",
+            "description": "Body to create",
+            "schema": {
+              "$ref": "#/definitions/CreateRuleType1"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "get": {
+        "tags": ["schedule"],
+        "summary": "Get all rules",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/rules/startDate::endDate": {
+      "summary": "Get schedule rules by date range interval",
+      "get": {
+        "tags": ["schedule"],
+        "summary": "Get all rules",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/rules/{ruleId}": {
+      "delete": {
+        "tags": ["schedule"],
+        "summary": "Delete a schedule rule by uuid short id",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CreateRuleType1": {
+      "type": "object",
+      "required": [
+        "username",
+        "password"
+      ],
+      "properties": {
+        "attendanceType": {
+          "type": "string",
+          "description": "Type of attendance"
+        },
+        "doctor": {
+          "type": "string",
+          "description": "Doctor of attendance"
+        },
+        "dateRule": {
+          "type": "object",
+          "description": "Rules of date of attendance",
+          "properties": {
+            "type": {
+              "type": "string",
+              "required": true
+            },
+            "days": {
+              "type": "array",
+              "required": true,
+              "items": { "type": "string" }
+            },
+            "intervals": {
+              "type": "array",
+              "required": true,
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "apiDefaultResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "version": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "data": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

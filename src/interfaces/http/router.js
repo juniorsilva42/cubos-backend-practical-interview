@@ -33,6 +33,7 @@ module.exports = () => {
 
   const routes = [
     { path: 'schedule', module: 'schedule' },
+    { path: 'api-docs', module: 'api-docs' }
   ];
 
   /*
