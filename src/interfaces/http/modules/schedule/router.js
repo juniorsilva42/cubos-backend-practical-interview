@@ -19,6 +19,7 @@ import { createSchema } from './schema';
 import { parse } from '../../../../infra/support/request';
 import { reject } from '../../../../infra/support/helpers/util';
 import { findData } from '../../../../infra/support/ds/findData';
+import { isEmptyObject } from '../../../../infra/jayess-db/util';
 
 /**
  * Router of schedule rules module
@@ -101,7 +102,9 @@ module.exports = ({
     // Get all rules
     const data = jayessdb.getAll('scheduleRules');
         
-    // Todo: verify is not documents 
+    if (data.length === 0) {
+      return res.status(Status.NOT_FOUND).json(Fail('There aren\'t registered rules'));
+    }
 
     return res.status(Status.OK).json(Success(data));
   });
@@ -188,7 +191,7 @@ module.exports = ({
       // Append schedule rule data rejecting valid property of Joi
       jayessdb.append('scheduleRules', reject(data, ['valid']));
 
-      return res.status(Status.OK).json(Success(data));
+      return res.status(Status.CREATED).json(Success(data));
     }
 
     return res.status(Status.FORBIDDEN).json(Fail(data));

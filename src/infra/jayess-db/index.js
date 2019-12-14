@@ -9,15 +9,20 @@ import { isEmptyObject } from './util';
  * @return {*} 
  */
 module.exports = () => {
-  const source = './data/cubos-db.json';
-  const documents = { scheduleRules: [] };
+  let dbInstance;
 
-  const adapter = new FileSync(source);
-  const db = lowdb(adapter);
+  function init({ database, docs }) {
+    const adapter = new FileSync(`./data/${database}`);
+    dbInstance = lowdb(adapter);
+    
+    // Start db documents
+    if (isEmptyObject(dbInstance)) {
+      dbInstance.defaults(docs).write();
 
-  // Start db documents
-  if (isEmptyObject(db)) {
-    db.defaults(documents).write();
+      return dbInstance;
+    }
+
+    return dbInstance;
   }
 
   /**
@@ -29,7 +34,7 @@ module.exports = () => {
    * @return {*} 
    */  
   const append = (from, data) => {
-    db
+    dbInstance
       .get(from)
       .push(data)
       .write();
@@ -44,7 +49,7 @@ module.exports = () => {
    * @return {*} 
    */    
   const update = (from, data) => {
-    db
+    dbInstance
       .update(from)
       .push(data)
       .write();
@@ -59,7 +64,7 @@ module.exports = () => {
    * @return {*} 
    */      
   const getByFind = (from, params = {}) => {
-    return db
+    return dbInstance
       .get(from)
       .find(params)
       .value();
@@ -73,7 +78,7 @@ module.exports = () => {
    * @return {*} 
    */      
   const getAll = (from) => {
-    return db
+    return dbInstance
       .get(from)
       .value();
   };
@@ -87,13 +92,14 @@ module.exports = () => {
    * @return {*} 
    */     
   const del = (from, params = {}) => {
-    db
+    dbInstance
       .get(from)
       .remove(params)
       .write();
   };
 
   return {
+    init,
     append,
     update,
     del,
