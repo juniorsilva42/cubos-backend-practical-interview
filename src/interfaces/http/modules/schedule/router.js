@@ -12,6 +12,7 @@ import {
 import { createSchema } from './schema';
 import { parse } from '../../../../infra/support/request';
 import { reject } from '../../../../infra/support/helpers/util';
+import { findElementsBasedOnBinarySearch } from '../../../../infra/support/ds/binarySearch';
 
 /**
  * Router of attendance module
@@ -77,7 +78,6 @@ module.exports = ({
 
     if (interval) {
       const dates = interval.split('::');
-      const seekedData = [];
 
       if (dates.length <= 1) {
         return res.status(Status.FORBIDDEN).json(Fail('Badly formatted date range'));
@@ -86,71 +86,14 @@ module.exports = ({
       const startDate = validateDate(dates[0]);
       const endDate = validateDate(dates[1]);
       
-      const findPos = (arr, { from, to }) => {
-        let findBestIndex = 0;
-        let seek; 
-        let l = 0; 
-        let h = 1; 
-
-        const fromDateToTime = from.getTime();
-        const toDateToTime = to.getTime();
-        let currentDate;
-
-        do {
-          if (isValidDate(arr[findBestIndex].dateRule.at)) {
-            seek = arr[findBestIndex];
-
-            currentDate = validateDate(arr[findBestIndex].dateRule.at).getTime();
-
-            if (currentDate >= fromDateToTime && currentDate <= toDateToTime) {
-              l = h;
-              h = 2 * h;
-              
-              seekedData.push(arr[findBestIndex]);
-            }
-          }
-
-          findBestIndex++;
-        } while ((findBestIndex <= arr.length) && arr[findBestIndex]);
- 
-        return bs(arr, { from, to }, l, h);
-      };
-
-      const bs = (data, { from, to }, start, end) => {
-        let findBestIndex = 0;
-        const middle = Math.floor((start + end) / 2);
-
-        do {
-          if (isValidDate(data[findBestIndex].dateRule.at)) {
-            const currentDate = validateDate(data[middle].dateRule.at).getTime();
-
-            const fromDateToTime = from.getTime();
-            const toDateToTime = to.getTime();
-  
-            if ((fromDateToTime === currentDate) || (toDateToTime === currentDate)) {
-              return data[middle];
-            }
-  
-            if ((fromDateToTime <= currentDate) && (toDateToTime <= currentDate)) {
-              return bs(data, { from, to }, start, middle);
-            }
-  
-            if ((fromDateToTime >= currentDate) && (toDateToTime >= currentDate)) {
-              return bs(data, { from, to }, middle, end);
-            }
-          }
-
-          findBestIndex++;
-        } while (isValidDate(data[findBestIndex].dateRule.at));
-      };
-
       // Verify if start end final dates are valid
       // And ensure which date must be less than or equal to end date
       if (isValidDate(dates[0]) && isValidDate(dates[1]) && validateTwoRangeInterval({ startDate: dates[0], endDate: dates[1] })) {
         // seek data with date range interval
         const data = jayessdb.getAll('scheduleRules');
         
-        findPos(data, { from: startDate, to: endDate });
+        // Find elements with range date interval based on Binary Seach Algorithm
+        const seekedData = findElementsBasedOnBinarySearch(data, { from: startDate, to: endDate });
 
         return res.status(Status.OK).json(Success(seekedData));      
       }
