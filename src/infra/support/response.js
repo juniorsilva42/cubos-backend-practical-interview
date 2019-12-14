@@ -3,9 +3,9 @@ import { assoc } from 'ramda';
 /**
  * Helper function to standardize responses
  *
- * @param success default = true
+ * @param {string} success default = true
  *
- * @return {data, version, date}
+ * @return {object} default response with data, success, date and version properties
 */
 module.exports = () => {
   const defaultResponse = (success = true) => ({

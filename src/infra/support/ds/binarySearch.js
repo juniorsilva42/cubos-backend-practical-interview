@@ -3,6 +3,15 @@ import {
   validateDate,
 } from '../../support/helpers/date';
 
+/**
+ * Util found n elements based on result of Binary Search Algorithm
+ *
+ * @param {array} arr data array of schedule
+ * @param {object} from start range date condition
+ * @param {object} to end range date condition
+ *
+ * @return {array} seekedData array of found elements 
+*/ 
 export const findElementsBasedOnBinarySearch = (arr, { from, to }) => {
   const seekedData = [];
 
@@ -38,6 +47,19 @@ export const findElementsBasedOnBinarySearch = (arr, { from, to }) => {
   return seekedData;
 };
 
+/**
+ * Binary Search Algorithm 
+ * 
+ * Custom BS algorithm to found element that satisfy the date range condition
+ *
+ * @param {array} data objects of schedules
+ * @param {object} from start range date condition
+ * @param {object} to end range date condition
+ * @param {int} start index of array
+ * @param {int} end index of array
+ *
+ * @return {*} 
+*/ 
 const binarySearch = (data, { from, to }, start, end) => {
   let findBestIndex = 0;
   const middle = Math.floor((start + end) / 2);
@@ -54,11 +76,11 @@ const binarySearch = (data, { from, to }, start, end) => {
       }
 
       if ((fromDateToTime <= currentDate) && (toDateToTime <= currentDate)) {
-        return bs(data, { from, to }, start, middle);
+        return binarySearch(data, { from, to }, start, middle);
       }
 
       if ((fromDateToTime >= currentDate) && (toDateToTime >= currentDate)) {
-        return bs(data, { from, to }, middle, end);
+        return binarySearch(data, { from, to }, middle, end);
       }
     }
 

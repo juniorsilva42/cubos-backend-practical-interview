@@ -3,7 +3,7 @@ import morgan from 'morgan';
 /**
  * Helper function to handle with HTTP logs response/requests logs
  *
- * @param {logger} Winston logger instance
+ * @param {Winston Instance} logger Winston Logger instance
  *
  * @return {*}
 */

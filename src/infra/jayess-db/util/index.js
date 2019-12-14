@@ -1,3 +1,10 @@
+/**
+  * Util to verify if has elements into database
+  *
+  * @param {dbInstance} instance of lowdb
+  *
+  * @return {boolean} true if has elements
+*/ 
 export const isEmptyObject = (dbInstance) => {
   const data = dbInstance.getState();
     

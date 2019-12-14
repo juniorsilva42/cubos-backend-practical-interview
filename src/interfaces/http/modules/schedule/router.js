@@ -1,7 +1,13 @@
+/*
+ * External Dependencies
+*/
 import { Router } from 'express';
 import Status from 'http-status';
 import shortUuid from 'short-uuid';
 
+/*
+ * Internal Dependencies
+*/
 import { 
   validateTwoRangeInterval,
   isValidDate,
@@ -15,18 +21,25 @@ import { reject } from '../../../../infra/support/helpers/util';
 import { findElementsBasedOnBinarySearch } from '../../../../infra/support/ds/binarySearch';
 
 /**
- * Router of attendance module
+ * Router of schedule rules module
  *
- * @return {router} router verbs of attendance
+ * @return {router} router verbs of schedule rules
 */
 module.exports = ({
-  logger,
   jayessdb,
   response: { Success, Fail },
 }) => {
   const router = Router();
 
-  const scheduleIsAllowed = (schedules, dateRuleToCreate) => {
+  /**
+   * Private function to verify if there is a shock in the date ranges for one day
+   *
+   * @param {array} schedules data array of schedule
+   * @param {object} dateRuleToCreate object with date and intervals info
+   *
+   * @return {boolean} true if not exists chock of intervals 
+  */ 
+  const _scheduleIsAllowed = (schedules, dateRuleToCreate) => {
     const validDate = validateDate(dateRuleToCreate.at);
 
     if (schedules.length > 0) {
@@ -66,13 +79,31 @@ module.exports = ({
     }
   };
 
+  /**
+   * Endpoint to get all rules of schedule
+   *
+   * @param {object} req express req
+   * @param {object} res express res
+   *
+   * @return {*}
+  */   
   router.get('/rules', async (req, res) => {
     // Get all rules
     const data = jayessdb.getAll('scheduleRules');
         
+    // Todo: verify is not documents 
+
     return res.status(Status.OK).json(Success(data));
   });
 
+  /**
+   * Endpoint to get schedule rules by given interval
+   *
+   * @param {object} req express req
+   * @param {object} res express res
+   *
+   * @return {*}
+  */   
   router.get('/rules/:interval', async (req, res) => {
     const { interval } = req.params;
 
@@ -102,6 +133,14 @@ module.exports = ({
     }
   });
 
+  /**
+   * Endpoint to create a new schedule rule
+   *
+   * @param {object} req express req
+   * @param {object} res express res
+   *
+   * @return {*}
+  */    
   router.post('/rules', async (req, res) => {
     const id = shortUuid.generate();
 
@@ -119,7 +158,7 @@ module.exports = ({
       // Get all data to validate
       const allSchedule = jayessdb.getAll('scheduleRules');
 
-      if (scheduleIsAllowed(allSchedule, dateRule)) {
+      if (_scheduleIsAllowed(allSchedule, dateRule)) {
         // Append schedule rule data rejecting valid property of Joi
         jayessdb.append('scheduleRules', reject(data, ['valid']));
 
@@ -133,6 +172,15 @@ module.exports = ({
     // return res.status(Status.FORBIDDEN).json(Fail(data));
   });
 
+  /**
+   * Endpoint to delete a schedule rule
+   *
+   * @param {object} req express req
+   * @param {object} res express res
+   * @param {string} id param of schedule rule
+   * 
+   * @return {*}
+  */   
   router.delete('/rules/:id', async (req, res) => {
     const { id } = req.params;
 

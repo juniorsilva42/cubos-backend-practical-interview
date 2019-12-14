@@ -1,6 +1,14 @@
 import { curryN } from 'ramda';
 import Joi from 'joi';
 
+/**
+ * Util to parse request based on given schema object
+ *
+ * @param {object} schema to verify body
+ * @param {object} data body of request, usually req.body
+ *
+ * @return {*} 
+*/ 
 const parse = curryN(2, (schema, data) => {
   try {
     const options = {
