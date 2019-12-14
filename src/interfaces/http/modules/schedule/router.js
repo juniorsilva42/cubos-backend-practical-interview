@@ -64,7 +64,7 @@ module.exports = ({
       }
     }
   };
-  
+
   router.get('/rules', async (req, res) => {
     // Get all rules
     const data = jayessdb.getAll('scheduleRules');
@@ -77,21 +77,82 @@ module.exports = ({
 
     if (interval) {
       const dates = interval.split('::');
+      const seekedData = [];
 
       if (dates.length <= 1) {
         return res.status(Status.FORBIDDEN).json(Fail('Badly formatted date range'));
       }
 
-      const startDate = dates[0];
-      const endDate = dates[1];
+      const startDate = validateDate(dates[0]);
+      const endDate = validateDate(dates[1]);
       
+      const findPos = (arr, { from, to }) => {
+        let findBestIndex = 0;
+        let seek; 
+        let l = 0; 
+        let h = 1; 
+
+        const fromDateToTime = from.getTime();
+        const toDateToTime = to.getTime();
+        let currentDate;
+
+        do {
+          if (isValidDate(arr[findBestIndex].dateRule.at)) {
+            seek = arr[findBestIndex];
+
+            currentDate = validateDate(arr[findBestIndex].dateRule.at).getTime();
+
+            if (currentDate >= fromDateToTime && currentDate <= toDateToTime) {
+              l = h;
+              h = 2 * h;
+              
+              seekedData.push(arr[findBestIndex]);
+            }
+          }
+
+          findBestIndex++;
+        } while ((findBestIndex <= arr.length) && arr[findBestIndex]);
+ 
+        return bs(arr, { from, to }, l, h);
+      };
+
+      const bs = (data, { from, to }, start, end) => {
+        let findBestIndex = 0;
+        const middle = Math.floor((start + end) / 2);
+
+        do {
+          if (isValidDate(data[findBestIndex].dateRule.at)) {
+            const currentDate = validateDate(data[middle].dateRule.at).getTime();
+
+            const fromDateToTime = from.getTime();
+            const toDateToTime = to.getTime();
+  
+            if ((fromDateToTime === currentDate) || (toDateToTime === currentDate)) {
+              return data[middle];
+            }
+  
+            if ((fromDateToTime <= currentDate) && (toDateToTime <= currentDate)) {
+              return bs(data, { from, to }, start, middle);
+            }
+  
+            if ((fromDateToTime >= currentDate) && (toDateToTime >= currentDate)) {
+              return bs(data, { from, to }, middle, end);
+            }
+          }
+
+          findBestIndex++;
+        } while (isValidDate(data[findBestIndex].dateRule.at));
+      };
+
       // Verify if start end final dates are valid
       // And ensure which date must be less than or equal to end date
-      if (isValidDate(startDate) && isValidDate(endDate) && validateTwoRangeInterval({ startDate, endDate })) {
+      if (isValidDate(dates[0]) && isValidDate(dates[1]) && validateTwoRangeInterval({ startDate: dates[0], endDate: dates[1] })) {
         // seek data with date range interval
         const data = jayessdb.getAll('scheduleRules');
         
-        return res.status(Status.OK).json(Success(data));      
+        findPos(data, { from: startDate, to: endDate });
+
+        return res.status(Status.OK).json(Success(seekedData));      
       }
     } else {
       return res.status(Status.FORBIDDEN).json(Fail('Badly formatted date range'));
@@ -114,17 +175,16 @@ module.exports = ({
     if (data.valid) {
       // Get all data to validate
       const allSchedule = jayessdb.getAll('scheduleRules');
-    
-      if (scheduleIsAllowed(allSchedule, dateRule)) {
-        return res.status(Status.OK).json(Success('Posso criar'));
-      } else {
-        return res.status(Status.FORBIDDEN).json(Fail('Não posso criar!'));
-      }
-   
-      // Append schedule rule data rejecting valid property of Joi
-      // jayessdb.append('scheduleRules', reject(data, ['valid']));
 
-      // return res.status(Status.OK).json(Success(data));
+      if (scheduleIsAllowed(allSchedule, dateRule)) {
+        // Append schedule rule data rejecting valid property of Joi
+        jayessdb.append('scheduleRules', reject(data, ['valid']));
+
+        return res.status(Status.OK).json(Success(data));
+      } else {
+        return res.status(Status.FORBIDDEN)
+          .json(Fail(`There is a rule in this same range for ${dateRule.at} date`));
+      }
     } 
     
     // return res.status(Status.FORBIDDEN).json(Fail(data));
