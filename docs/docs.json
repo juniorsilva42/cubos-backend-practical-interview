@@ -49,20 +49,35 @@
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "Ok"
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/apiDefaultResponse"
+            }
           }
         }
       }
     },
     "/rules/startDate::endDate": {
-      "summary": "Get schedule rules by date range interval",
       "get": {
         "tags": ["schedule"],
-        "summary": "Get all rules",
+        "summary": "Get schedule rules by date range interval",
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "startDate",
+            "description": "Start date of range"
+          },
+          {
+            "name": "endDate",
+            "description": "End date of range"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Ok"
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/apiDefaultResponse"
+            }
           }
         }
       }
@@ -76,7 +91,13 @@
           "200": {
             "description": "Ok"
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "ruleId",
+            "description": "Rule id to delete"
+          }
+        ]
       }
     }
   },
