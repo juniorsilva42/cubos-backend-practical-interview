@@ -63,17 +63,17 @@ A brief overview of the project file structure
    ├── container.js
    ├── index.js
 ```
-- infra: lowest layer of all and is the limit to what is external to our application: database, core function etc;
--- jayessdb: abstract to handle with function of json db handlw lowdb;
--- logging: functions to handle with entrance and exit logs of app;
--- support: function of application core. Utils or not;
-- interfaces: contains all application entry points. In this case, there modules (controllers), but could have CLI, websockets and so on;
--- middelwares: to handle with request/responses
--- modules: contains too all possible endpoints for the /foo-module path with a router;
-- server: create a new express application;
-- bootstrap.js: start application
-- container.js: create a dispatch a singleton connections with IoC and DI on the application;
-- index.js: start express app and bootsrap json database;
+- infra: lowest layer of all and is the limit to what is external to our application: database, core function etc;      
+-- jayessdb: abstract to handle with function of json db handlw lowdb;      
+-- logging: functions to handle with entrance and exit logs of app;      
+-- support: function of application core. Utils or not;      
+- interfaces: contains all application entry points. In this case, there modules (controllers), but could have CLI, websockets and so on;       
+-- middelwares: to handle with request/responses;                  
+-- modules: contains too all possible endpoints for the /foo-module path with a router;        
+- server: create a new express application;    
+- bootstrap.js: start application;      
+- container.js: create a dispatch a singleton connections with IoC and DI on the application;       
+- index.js: start express app and bootsrap json database;      
 
 ## Quick Start
 1. Clone the repository with `git clone git@github.com:jsiilva1/cubos-backend-practical-interview.git`
