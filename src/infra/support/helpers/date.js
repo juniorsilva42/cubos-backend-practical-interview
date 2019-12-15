@@ -1,4 +1,22 @@
 /**
+ * Util to verify if given date that  will be created the rule is valid, ie greater than or equal to the current date
+ * 
+ * @param {string} date date to compare
+ *
+ * @return {boolean} 
+*/ 
+export const isConsistentDate = (date) => {
+  const dateToCreate = validateDate(date).getTime();
+  const currentDate = formatter(new Date()).atTime;
+
+  if (dateToCreate >= currentDate) {
+    return true;
+  }
+  
+  return false;
+}
+
+/**
  * Util to verify range condition base of two given dates (base: date1 <= date2)
  * 
  * @param {object} startDate primary date of condition
@@ -42,12 +60,16 @@ export const validateDate = (date) => {
 */ 
 export const formatter = (date) => {
   const day = date.getDate();
-  const month = date.getMonth() + 1;
+  const month = date.getMonth();
   const year = date.getFullYear();
 
   const formattedMonth = month < 10 ? `0${month}` : month;
 
-  return `${day}-${formattedMonth}-${year}`;
+  return {
+    fullTextDate: `${day}-${formattedMonth}-${year}`,
+    atTime: new Date(year, month, day).getTime(),
+    atDateInstance: new Date(year, month, day),
+  };
 };
 
 /**

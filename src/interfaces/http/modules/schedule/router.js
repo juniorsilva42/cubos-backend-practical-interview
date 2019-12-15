@@ -14,6 +14,8 @@ import {
   isValidHour,
   validateDate,
   formatAndSetHour,
+  isConsistentDate,
+  formatter,
 } from '../../../../infra/support/helpers/date';
 import { createSchema } from './schema';
 import { parse } from '../../../../infra/support/request';
@@ -162,7 +164,11 @@ module.exports = ({
 
     let dateInfo = {};
     let intervalsToCreate;
-    let valid = null;
+    let validStatements = {
+      forDate: true,
+      forDaily: true,
+    };
+    const unavailableRules = [];
 
     const {
       attendanceType,
@@ -171,9 +177,17 @@ module.exports = ({
     } = req.body;
     
     intervalsToCreate = dateRule.intervals;
+    
+    // Get all from db
+    const scheduleRules = jayessdb.getByFindWithFilter('scheduleRules');
 
     if (dateRule.at) {
       const { at } = dateRule;
+
+      if (!isConsistentDate(at)) {
+        return res.status(Status.UNPROCESSABLE_ENTITY)
+          .json(Fail('The date is invalid! Try to schedule for today or future days!'));
+      }
 
       // Mount date info to create
       dateInfo = {
@@ -181,16 +195,13 @@ module.exports = ({
         hasDate: true,
       };
 
-      // Verify if has schedule rule for this date
-      const scheduleRules = jayessdb.getByFindWithFilter('scheduleRules');
-
       if (scheduleRules.length > 0) {
         for (let scheduleRule of scheduleRules) {
           const { atTime, intervals } = scheduleRule.dateRule;
           
           // Trying to create a rule for an existing day
           if (atTime === dateInfo.atTime) {
-            // Get intervals
+            // Get intervals from database
             for (let interval of intervals) {
               const { start, end } = interval;
 
@@ -203,17 +214,18 @@ module.exports = ({
                   const endHourToCreate = formatAndSetHour(intervalToCreate.end, validateDate(at));
 
                   // verify intervals
-                  if((startHourToCreate >= startHourToCompare && endHourToCreate <= endHourToCompare)){
-                    valid = false;
-                  } else {
-                    valid = true;
+                  if(
+                    (startHourToCreate >= startHourToCompare && endHourToCreate <= endHourToCompare) || 
+                    (endHourToCreate >= startHourToCompare && endHourToCreate <= endHourToCompare)                    
+                  ){
+                    validStatements.forDate = false;
                   }
                 }
               }
             }
           }
         }
-      }      
+      }   
     } else {
       dateInfo = {
         atTime: -1,
@@ -221,8 +233,39 @@ module.exports = ({
       };
     }
 
+    // Verify daily restritions
     if (dateRule.type) {
-      // valid by types weekly or daily
+      const definedDate = formatter(new Date()).atDateInstance;
+
+      // TO-DO: valid by types weekly or daily
+      if (dateRule.type === 'daily') {
+        for (let scheduleRule of scheduleRules) {
+          const { intervals, at } = scheduleRule.dateRule;
+
+          for (let interval of intervals) {
+            const { start, end } = interval;
+  
+            const startHourToCompare = formatAndSetHour(start, definedDate);
+            const endHourToCompare = formatAndSetHour(end, definedDate);
+              
+            if (intervalsToCreate) {
+              for (let intervalToCreate of intervalsToCreate) {
+                const startHourToCreate = formatAndSetHour(intervalToCreate.start, definedDate);
+                const endHourToCreate = formatAndSetHour(intervalToCreate.end, definedDate);
+  
+                // verify intervals
+                if(
+                  (startHourToCreate >= startHourToCompare && endHourToCreate <= endHourToCompare) || 
+                  (endHourToCreate >= startHourToCompare && endHourToCreate <= endHourToCompare)
+                 ){
+                  validStatements.forDaily = false;
+                  unavailableRules.push({ at, interval });
+                }
+              }
+            }              
+          }          
+        }
+      }
     }
 
     const createBody = {
@@ -238,8 +281,18 @@ module.exports = ({
     // Pass body data to validate with predefined schema
     const data = parse(createSchema, createBody);
     
-    if (!valid) {
-      return res.status(Status.FORBIDDEN).json(Fail(`This time slot is already reserved for ${dateRule.at}`));
+    if (!validStatements.forDaily) {
+      const returnStatement = {
+        message: 'This time slot is already reserved for daily rule',
+        unavailableRules,
+      };
+
+      return res.status(Status.FORBIDDEN)
+        .json(Fail(returnStatement));
+    }
+
+    if (!validStatements.forDate) {
+      return res.status(Status.FORBIDDEN).json(Fail(`This time slot is already reserved for ${dateRule.at || dateRule.type} date rule`));
     }
 
     if (data.valid) {

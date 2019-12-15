@@ -63,7 +63,7 @@ describe('Route: /schedule/rules to handle with rules', () => {
         attendanceType: "Oncology",
         doctor: "Test Alisson, M.D",
         dateRule: {
-          at: "25-10-2019",
+          at: "17-12-2019",
           intervals: [
             { start: "17:00", end: "18:00" }
           ]
@@ -166,7 +166,7 @@ describe('Route: /schedule/rules to handle with rules', () => {
         attendanceType: "Oncology",
         doctor: "Test Alisson, M.D",
         dateRule: {
-          at: "26-10-2019",
+          at: "18-12-2019",
           intervals: [
             { start: "17:00", end: "18:00" }
           ]
@@ -178,7 +178,7 @@ describe('Route: /schedule/rules to handle with rules', () => {
         attendanceType: "Oncology",
         doctor: "Test Alisson, M.D",
         dateRule: {
-          at: "27-10-2019",
+          at: "19-12-2019",
           intervals: [
             { start: "18:00", end: "19:00" }
           ]
@@ -190,7 +190,7 @@ describe('Route: /schedule/rules to handle with rules', () => {
         attendanceType: "Oncology",
         doctor: "Test Alisson, M.D",
         dateRule: {
-          at: "28-10-2019",
+          at: "20-12-2019",
           intervals: [
             { start: "19:00", end: "20:00" }
           ]
@@ -230,6 +230,30 @@ describe('Route: /schedule/rules to handle with rules', () => {
           if (res.data) {
             expect(res.data.length).to.equal(3);
           }
+        });
+
+      done();
+    });
+
+    it('should return a error message when trying create a test with a date range interval unavailable with fixed date', (done) => {
+      const mockScheduleRuleFixedDate = {
+        id: shortUuid.generate(), 
+        attendanceType: "Oncology",
+        doctor: "Test Alisson, M.D",
+        dateRule: {
+          at: "17-12-2019",
+          intervals: [
+            { start: "17:00", end: "18:00" }
+          ]
+        }      
+      };
+
+      request
+        .post('/schedule/rules')
+        .type('json')
+        .send(mockScheduleRuleFixedDate)
+        .end((err, res) => {
+          expect(res).to.have.status(403);
         });
 
       done();
