@@ -21,7 +21,6 @@ import { createSchema } from './schema';
 import { parse } from '../../../../infra/support/request';
 import { reject } from '../../../../infra/support/helpers/util';
 import { findData } from '../../../../infra/support/ds/findData';
-import { isEmptyObject } from '../../../../infra/jayess-db/util';
 
 /**
  * Router of schedule rules module
@@ -33,64 +32,6 @@ module.exports = ({
   response: { Success, Fail },
 }) => {
   const router = Router();
-
-  /**
-   * Private function to verify if there is a shock in the date ranges for one day
-   *
-   * @param {array} schedules data array of schedule
-   * @param {object} dateRuleToCreate object with date and intervals info
-   *
-   * @return {boolean} true if not exists chock of intervals 
-  */
-  const _scheduleIsAllowed = (schedules, dateRuleToCreate) => {
-    const schedulers = schedules;
-    let validDate;
-
-    if (dateRuleToCreate.at) {
-      validDate = validateDate(dateRuleToCreate.at);
-    } else {
-      validDate = 'unknown';
-    }
-
-    if (schedulers.length > 0) {
-      for (let schedule of schedulers) {
-        const { dateRule } = schedule;
-
-        if (isValidDate(dateRule.at) && dateRule.at === dateRuleToCreate.at) {
-          const { intervals: intervalsToCreate } = dateRuleToCreate;
-
-          if (intervalsToCreate.length > 0) {
-            for (let intervalToCreate of intervalsToCreate) {
-              if (isValidHour(intervalToCreate.start) && isValidHour(intervalToCreate.end)) {
-                const startHourToCreate = formatAndSetHour(intervalToCreate.start, validDate);
-                const endHourToCreate = formatAndSetHour(intervalToCreate.end, validDate);
-
-                // Iterate over intervals of result from db based on date of creation rule                    
-                const { intervals } = dateRule;
-                
-                for (let interval of intervals) {
-                  if (isValidHour(interval.start) && isValidHour(interval.end)) {
-                    const startHourToCompare = formatAndSetHour(interval.start, validDate);
-                    const endHourToCompare = formatAndSetHour(interval.end, validDate);
-
-                    if((startHourToCreate >= startHourToCompare && startHourToCreate <= endHourToCompare) ||
-                       (endHourToCreate >= startHourToCompare && endHourToCreate <= endHourToCompare )){
-                        return false;
-                    } else {
-                      return true;
-                    }
-                  }
-                }
-              }
-            }
-          }
-        } else {
-          // not same date
-          return true;
-        }
-      }
-    }
-  };
 
   /**
    * Endpoint to get all rules of schedule
@@ -144,8 +85,16 @@ module.exports = ({
         // Find elements with range date interval based on Binary Seach Algorithm
         const seekData = findData(filterData, { from: startDate, to: endDate });
 
+        if (seekData.length === 0) {
+          return res.status(Status.NOT_FOUND)
+            .json(Fail(`There aren't rules for the interval from ${dates[0]} to ${dates[1]}`));
+        }
+
         return res.status(Status.OK).json(Success(seekData));
-      }
+      } 
+
+      return res.status(Status.UNPROCESSABLE_ENTITY)
+        .json(Fail('Invalid formatted date at range date interval'));
     } else {
       return res.status(Status.FORBIDDEN).json(Fail('Badly formatted date range'));
     }
@@ -319,7 +268,7 @@ module.exports = ({
 
     const data = jayessdb.del('scheduleRules', { id });
 
-    if (!data) {
+    if (data.length === 0) {
       return res.status(Status.NOT_FOUND).json(Fail(`Schedule rule with id ${id} not found`));
     }
 

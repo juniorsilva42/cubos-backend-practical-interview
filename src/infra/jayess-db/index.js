@@ -99,7 +99,7 @@ module.exports = () => {
    * @return {*} 
    */     
   const del = (from, params = {}) => {
-    dbInstance
+    return dbInstance
       .get(from)
       .remove(params)
       .write();
