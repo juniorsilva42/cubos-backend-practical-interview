@@ -1,6 +1,6 @@
 import shortUuid from 'short-uuid';
 
-describe('Route: /schedule/rules to handle with rules', () => {  
+describe('Route: /schedule/rules to handle with rules', () => {
   describe('POST /schedule/rules', () => {   
     it('should create a new schedule rule with daily restrition', done => {
       let id = shortUuid.generate();
@@ -129,72 +129,7 @@ describe('Route: /schedule/rules to handle with rules', () => {
     });      
   });
 
-  describe('GET /schedule/rules', () => {
-    before('Insert some intervals', () => {
-      const mock1 = {
-        id: shortUuid.generate(),
-        attendanceType: "Oncology",
-        doctor: "Test Alisson, M.D",
-        dateRule: {
-          at: "25-10-2019",
-          intervals: [
-            { start: "17:00", end: "18:00" }
-          ]
-        }      
-      };
-
-      const mock2 = {
-        id: shortUuid.generate(),
-        attendanceType: "Oncology",
-        doctor: "Test Alisson, M.D",
-        dateRule: {
-          at: "26-10-2019",
-          intervals: [
-            { start: "17:00", end: "18:00" }
-          ]
-        }      
-      };
-
-      const mock3 = {
-        id: shortUuid.generate(),
-        attendanceType: "Oncology",
-        doctor: "Test Alisson, M.D",
-        dateRule: {
-          at: "27-10-2019",
-          intervals: [
-            { start: "17:00", end: "18:00" }
-          ]
-        }      
-      };    
-      
-      // Create case 1
-      request 
-        .post('/schedule/rules')
-        .type('json')
-        .send(mock1)
-        .end((err, res) => {
-          expect(res).to.have.status(201);
-        });
-
-        // Create case 2        
-        request 
-          .post('/schedule/rules')
-          .type('json')
-          .send(mock2)
-          .end((err, res) => {
-            expect(res).to.have.status(201);
-          });
-
-        // Create case 3        
-        request 
-          .post('/schedule/rules')
-          .type('json')
-          .send(mock3)
-          .end((err, res) => {
-            expect(res).to.have.status(201);
-          });
-    });
-
+  describe('Create some rules with fixed date to mock tests', () => {
     it('should return a list of rules if rules is not empty', (done) => {
       request
         .get('/schedule/rules')
@@ -222,5 +157,82 @@ describe('Route: /schedule/rules to handle with rules', () => {
 
       done();
     });      
+  });  
+
+  describe('GET /schedule/rules', () => {
+    before('Insert some intervals', () => {
+      const mock1 = {
+        id: shortUuid.generate(),
+        attendanceType: "Oncology",
+        doctor: "Test Alisson, M.D",
+        dateRule: {
+          at: "26-10-2019",
+          intervals: [
+            { start: "17:00", end: "18:00" }
+          ]
+        }      
+      };
+
+      const mock2 = {
+        id: shortUuid.generate(),
+        attendanceType: "Oncology",
+        doctor: "Test Alisson, M.D",
+        dateRule: {
+          at: "27-10-2019",
+          intervals: [
+            { start: "18:00", end: "19:00" }
+          ]
+        }      
+      };
+
+      const mock3 = {
+        id: shortUuid.generate(),
+        attendanceType: "Oncology",
+        doctor: "Test Alisson, M.D",
+        dateRule: {
+          at: "28-10-2019",
+          intervals: [
+            { start: "19:00", end: "20:00" }
+          ]
+        }      
+      };    
+      
+      // Create case 1
+      request.post('/schedule/rules').type('json').send(mock1).end();
+
+      // Create case 2        
+      request.post('/schedule/rules').type('json').send(mock2).end();
+
+      // Create case 3        
+      request.post('/schedule/rules').type('json').send(mock3).end();
+    });
+        
+    it('should return a list of rules if rules is not empty', (done) => {
+      request
+        .get('/schedule/rules')
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          
+          if (res.data) {
+            to.isAbove(res.data.length, 1);
+          }
+        });
+
+      done();
+    });
+
+    it('should return a list of rules by range interval date', (done) => {
+      request
+        .get('/schedule/rules/25-10-19::27-10-19')
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          
+          if (res.data) {
+            expect(res.data.length).to.equal(3);
+          }
+        });
+
+      done();
+    });   
   });  
 });

@@ -20,6 +20,7 @@ const createSchema = {
       type: Joi.string(),
       days: Joi.array().items(Joi.string()),
       intervals: Joi.array().items({ start: Joi.string(), end: Joi.string() }),
+      hasDate: Joi.boolean().required(),
     }),
 };
 

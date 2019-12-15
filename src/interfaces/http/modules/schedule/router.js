@@ -160,18 +160,69 @@ module.exports = ({
   router.post('/rules', async (req, res) => {
     const id = shortUuid.generate();
 
+    let dateInfo = {};
+    let intervalsToCreate;
+    let valid = null;
+
     const {
       attendanceType,
       doctor,
       dateRule,
     } = req.body;
-
-    let atTime;
+    
+    intervalsToCreate = dateRule.intervals;
 
     if (dateRule.at) {
-      atTime = validateDate(dateRule.at).getTime();
+      const { at } = dateRule;
+
+      // Mount date info to create
+      dateInfo = {
+        atTime: validateDate(at).getTime(),
+        hasDate: true,
+      };
+
+      // Verify if has schedule rule for this date
+      const scheduleRules = jayessdb.getByFindWithFilter('scheduleRules');
+
+      if (scheduleRules.length > 0) {
+        for (let scheduleRule of scheduleRules) {
+          const { atTime, intervals } = scheduleRule.dateRule;
+          
+          // Trying to create a rule for an existing day
+          if (atTime === dateInfo.atTime) {
+            // Get intervals
+            for (let interval of intervals) {
+              const { start, end } = interval;
+
+              const startHourToCompare = formatAndSetHour(start, validateDate(at));
+              const endHourToCompare = formatAndSetHour(end, validateDate(at));
+
+              if (intervalsToCreate) {
+                for (let intervalToCreate of intervalsToCreate) {
+                  const startHourToCreate = formatAndSetHour(intervalToCreate.start, validateDate(at));
+                  const endHourToCreate = formatAndSetHour(intervalToCreate.end, validateDate(at));
+
+                  // verify intervals
+                  if((startHourToCreate >= startHourToCompare && endHourToCreate <= endHourToCompare)){
+                    valid = false;
+                  } else {
+                    valid = true;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }      
     } else {
-      atTime = -1;
+      dateInfo = {
+        atTime: -1,
+        hasDate: false,
+      };
+    }
+
+    if (dateRule.type) {
+      // valid by types weekly or daily
     }
 
     const createBody = {
@@ -179,13 +230,17 @@ module.exports = ({
       attendanceType,
       doctor,
       dateRule: {
-        atTime,
+        ...dateInfo,
         ...dateRule,
       },
     };
 
     // Pass body data to validate with predefined schema
     const data = parse(createSchema, createBody);
+    
+    if (!valid) {
+      return res.status(Status.FORBIDDEN).json(Fail(`This time slot is already reserved for ${dateRule.at}`));
+    }
 
     if (data.valid) {
       // Append schedule rule data rejecting valid property of Joi

@@ -70,6 +70,13 @@ module.exports = () => {
       .value();
   };
 
+  const getByFindWithFilter = (from, params = {}) => {
+    return dbInstance
+      .get(from)
+      .filter({ dateRule: { hasDate: true } })
+      .value();
+  };
+
   /**
    * Get all items from json db
    *
@@ -104,6 +111,7 @@ module.exports = () => {
     update,
     del,
     getByFind,
+    getByFindWithFilter,
     getAll,
   };
 };
