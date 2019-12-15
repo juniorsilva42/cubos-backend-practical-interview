@@ -11,7 +11,6 @@ import shortUuid from 'short-uuid';
 import {
   validateTwoRangeInterval,
   isValidDate,
-  isValidHour,
   validateDate,
   formatAndSetHour,
   isConsistentDate,

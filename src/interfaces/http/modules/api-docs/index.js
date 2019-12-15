@@ -7,13 +7,7 @@ import router from './router';
  * @return {router} router of module with container decl
 */
 module.exports = () => {
-  const {
-    logger,
-  } = container.cradle;
-
   return {
-    router: router({
-      logger,
-    }),
+    router: router(),
   };
 };

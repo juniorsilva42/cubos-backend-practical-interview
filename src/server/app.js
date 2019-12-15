@@ -24,6 +24,7 @@ module.exports = ({
 
   let httpServer;
   const HTTP_MODE_ON = true;
+  const { APP_PORT = 5000 } = process.env;
 
   /*
    *
@@ -32,7 +33,7 @@ module.exports = ({
    * This option is great for preparing the application to fire with https or http2. All this due to its parameterization
   */
   if (HTTP_MODE_ON) {
-    httpServer = (fn) => http.createServer(app).listen(5000, fn);
+    httpServer = (fn) => http.createServer(app).listen(APP_PORT, fn);
   }
 
   return {
@@ -40,7 +41,7 @@ module.exports = ({
     start: async () => {
       if (HTTP_MODE_ON) {
         await httpServer(() => {
-          logger.info('API running on HTTP server on port 5000');
+          logger.info(`API running on HTTP server on port ${APP_PORT}`);
         });
       }
     },

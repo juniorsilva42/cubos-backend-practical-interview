@@ -1,7 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import {
   validateDate,
-  isValidDate,
 } from '../helpers/date';
 
 /**

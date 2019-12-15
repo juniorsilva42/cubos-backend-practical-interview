@@ -10,13 +10,11 @@ import swaggerUi from 'swagger-ui-express';
 import docs from '../../../../../docs/docs.json';
 
 /**
- * Router of schedule rules module
+ * Router of api-docs
  *
- * @return {router} router verbs of schedule rules
+ * @return {router} router verbs of api-docs
 */
-module.exports = ({
-  logger,
-}) => {
+module.exports = () => {
   const router = Router();
 
   router.use('/', swaggerUi.serve, swaggerUi.setup(docs));
