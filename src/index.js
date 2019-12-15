@@ -4,6 +4,8 @@ const app = container.resolve('app');
 const jayessdb = container.resolve('jayessdb');
 
 (async () => {
+  const { APP_ENV } = process.env;
+  
   try {
     // Application start
     await app.start();

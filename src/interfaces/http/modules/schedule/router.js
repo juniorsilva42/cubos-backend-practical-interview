@@ -211,6 +211,10 @@ module.exports = ({
 
     const data = jayessdb.del('scheduleRules', { id });
 
+    if (!data) {
+      return res.status(Status.NOT_FOUND).json(Fail(`Schedule rule with id ${id} not found`));
+    }
+
     return res.status(Status.OK).json(Success(data));
   });
 

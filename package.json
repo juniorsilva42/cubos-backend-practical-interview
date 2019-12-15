@@ -9,7 +9,7 @@
     "lint": "./node_modules/.bin/eslint ./src/**/*.js",
     "lint:fix": "./node_modules/.bin/eslint ./src/**/*.js --fix",
     "test:unit": "APP_ENV=test ./node_modules/.bin/mocha --opts ./__tests__/mocha.opts ./__tests__/unit -name '*.spec.js' --recursive -R spec",
-    "test:integration": "APP_ENV=test ./node_modules/.bin/mocha --opts ./__tests__/mocha.opts ./__tests__/integration -name '*.spec.js' --recursive --timeout 5000 -R spec",
+    "test:integration": "APP_ENV=test ./node_modules/.bin/mocha --opts ./__tests__/mocha.opts ./__tests__/integration -name '*.spec.js' --recursive --timeout 5000",
     "test": "npm run test:unit && npm run test:integration"
   },
   "repository": {

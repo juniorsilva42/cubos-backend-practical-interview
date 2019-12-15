@@ -20,7 +20,7 @@ module.exports = () => {
   router.use(httpLogger(logger()));
 
   // Set default middlewares to app
-  router.options('*', cors());
+  router.options('*', cors('*'));
   router.use(cors('*'));
   router.use(bodyParser.json());
   router.use(bodyParser.urlencoded({ extended: true }));
