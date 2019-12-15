@@ -76,20 +76,25 @@ module.exports = ({
       // And ensure which date must be less than or equal to end date
       if (isValidDate(dates[0]) && isValidDate(dates[1]) && validateTwoRangeInterval({ startDate: dates[0], endDate: dates[1] })) {
         // seek data with date range interval
-        const data = jayessdb.getAll('scheduleRules');
+        const data = jayessdb.getByFindWithFilter('scheduleRules');
 
-        // Filter data to avoid elemens with -1 getTime() date
-        const filterData = data.filter((el) => el.dateRule.atTime !== -1);
+        if (data && data.length > 0) {
+          // Filter data to avoid elemens with -1 getTime() date
+          const filterData = data.filter((el) => el.dateRule.atTime !== -1);
 
-        // Find elements with range date interval based on Binary Seach Algorithm
-        const seekData = findData(filterData, { from: startDate, to: endDate });
+          // Find elements with range date interval based on Binary Seach Algorithm
+          const seekData = findData(filterData, { from: startDate, to: endDate });
 
-        if (seekData.length === 0) {
-          return res.status(Status.NOT_FOUND)
-            .json(Fail(`There aren't rules for the interval from ${dates[0]} to ${dates[1]}`));
+          if (seekData.length === 0) {
+            return res.status(Status.NOT_FOUND)
+              .json(Fail(`There aren't rules for the interval from ${dates[0]} to ${dates[1]}`));
+          }
+
+          return res.status(Status.OK).json(Success(seekData));
         }
 
-        return res.status(Status.OK).json(Success(seekData));
+        return res.status(Status.NOT_FOUND)
+          .json(Fail('There aren\'t registered rules or not rules with fixed date'));
       } 
 
       return res.status(Status.UNPROCESSABLE_ENTITY)
