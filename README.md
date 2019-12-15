@@ -30,6 +30,7 @@ Phone: +55 89 994112266
 - You can access API docs at `http://localhost:<PORT>/api/<VERSION>/api-docs`. Usually: `http://localhost:5000/api/v1/api-docs	`
 - The data file will be created in a `data` folder in the project root, called ` cubos-db.json` 
 - The swagger documentation file and postman collections are located in the `docs` folder at the root of the project.
+- Developed on Linux Ubuntu 19.10 Budgie Distro Platform
 
 ## Technology
 Here's a brief overview of technology stack:
